@@ -33,7 +33,13 @@ class APIDistanceResult
             ];
         }
 
-        array_multisort($result, SORT_ASC);
+        function duration_compare($element1, $element2) {
+            $entry1 = (int)$element1['duration'];
+            $entry2 = (int)$element2['duration'];
+            return $entry1 - $entry2;
+        }
+
+        usort($result, "App\\Client\\duration_compare");
 
         return new JsonResponse($result, 200);
     }

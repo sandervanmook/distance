@@ -34,4 +34,17 @@ class ZipcodeTest extends TestCase
 
         $this->assertEquals('4411gb', $zipcode);
     }
+
+    public function test_it_throws_if_you_request_nl_on_be_value_function()
+    {
+        $zipcode = new Zipcode("4411 gb");
+        $this->expectException(\InvalidArgumentException::class);
+        $zipcode->getCompleteBelgianValue();
+    }
+
+    public function test_it_returns_complete_belgian_version()
+    {
+        $zipcode = new Zipcode("2910");
+        $this->assertEquals('2910 Belgium',$zipcode->getCompleteBelgianValue());
+    }
 }
