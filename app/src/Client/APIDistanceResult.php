@@ -33,9 +33,10 @@ class APIDistanceResult
             ];
         }
 
-        function duration_compare($element1, $element2) {
+        function duration_compare($element1, $element2): int {
             $entry1 = (int)$element1['duration'];
             $entry2 = (int)$element2['duration'];
+
             return $entry1 - $entry2;
         }
 

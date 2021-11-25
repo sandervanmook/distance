@@ -35,7 +35,6 @@ class GoogleAPIClient
                 ],
             ]
         );
-
         return $request->getContent();
     }
 }

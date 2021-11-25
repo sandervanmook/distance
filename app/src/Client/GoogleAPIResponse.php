@@ -17,6 +17,18 @@ class GoogleAPIResponse
     {
         $resultArray = json_decode($APIResult, true);
 
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new \InvalidArgumentException(json_last_error());
+        }
+
+        if ("" === $resultArray['destination_addresses'][0]) {
+            throw new \InvalidArgumentException('Destination address not found');
+        }
+
+        if ("" === $resultArray['origin_addresses'][0]) {
+            throw new \InvalidArgumentException('Starting address not found');
+        }
+
         $this->distance = $resultArray['rows'][0]['elements'][0]['distance']['text'];
         $this->duration = $resultArray['rows'][0]['elements'][0]['duration']['text'];
         $this->destination = $resultArray['destination_addresses'][0];

@@ -18,7 +18,7 @@ class Destinations
                 $this->destinations[] = new Zipcode($destination);
             }
         } else{
-            throw new \InvalidArgumentException('No valid destinations given');
+            throw new \InvalidArgumentException('No valid destination(s) given, please use a comma separated list');
         }
     }
 
