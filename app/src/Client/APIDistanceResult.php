@@ -23,15 +23,7 @@ class APIDistanceResult
     {
         $result = [];
 
-        if ($startingPointZipcode->isBelgianZipcode()) {
-            $startingPointZipcode = $startingPointZipcode->getValue().' Belgium';
-        }
-
         foreach ($destinations->getDestinations() as $destination) {
-            if ($destination->isBelgianZipcode()) {
-                $destination = $destination->getValue().' Belgium';
-            }
-
             $entry = new GoogleAPIResponse($this->googleAPIClient->sendRequest($startingPointZipcode, $destination));
 
             $result[] = [
@@ -45,8 +37,4 @@ class APIDistanceResult
 
         return new JsonResponse($result, 200);
     }
-
-
-
-
 }

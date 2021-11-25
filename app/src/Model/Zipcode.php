@@ -14,7 +14,7 @@ use InvalidArgumentException;
  */
 final class Zipcode
 {
-    private $zipcode;
+    private string $zipcode;
 
     public function __construct(string $zipcode)
     {
@@ -25,6 +25,11 @@ final class Zipcode
         }
 
         $this->zipcode = $strippedString;
+    }
+
+    public function __toString(): string
+    {
+        return $this->zipcode;
     }
 
     public function isDutchZipcode() : bool
@@ -72,6 +77,15 @@ final class Zipcode
     public function getValue(): string
     {
         return $this->zipcode;
+    }
+
+    public function getCompleteBelgianValue(): string
+    {
+        if (!$this->isBelgianZipcode()) {
+            throw new InvalidArgumentException('This is not a belgian zipcode');
+        }
+
+        return $this->zipcode . ' Belgium';
     }
 
 

@@ -22,15 +22,15 @@ class GoogleAPIClient
         $this->client = $client;
     }
 
-    public function sendRequest(string $startingPoint, string $destination):string
+    public function sendRequest(Zipcode $startingPoint, Zipcode $destination):string
     {
         $request = $this->client->request(
             'POST',
             self::BASEURL,
             [
                 'query' => [
-                    'origins' => $startingPoint,
-                    'destinations' => $destination,
+                    'origins' => $startingPoint->isBelgianZipcode()?$startingPoint->getCompleteBelgianValue():$startingPoint->getValue(),
+                    'destinations' => $destination->isBelgianZipcode()?$destination->getCompleteBelgianValue():$destination->getValue(),
                     'key' => $this->APIKey,
                 ],
             ]
