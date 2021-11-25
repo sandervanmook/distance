@@ -27,11 +27,11 @@ final class Zipcode
         $this->zipcode = $strippedString;
     }
 
-    public function isDutchZipcode($stringToTest) : bool
+    public function isDutchZipcode() : bool
     {
         $regex = '/^[1-9][0-9]{3}[\s]?[A-Za-z]{2}$/i';
 
-        if (preg_match($regex, $stringToTest)) {
+        if (preg_match($regex, $this->zipcode)) {
             return true;
         }
 
@@ -39,11 +39,11 @@ final class Zipcode
     }
 
 
-    public function isBelgianZipcode($stringToTest) : bool
+    public function isBelgianZipcode() : bool
     {
         $regex = '/^\d{4}$/';
 
-        if (preg_match($regex, $stringToTest)) {
+        if (preg_match($regex, $this->zipcode)) {
             return true;
         }
 
@@ -69,7 +69,7 @@ final class Zipcode
         return false;
     }
 
-    public function __toString(): string
+    public function getValue(): string
     {
         return $this->zipcode;
     }

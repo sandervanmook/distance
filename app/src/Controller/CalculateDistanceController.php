@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Client\GoogleAPIClient;
+use App\Client\APIDistanceResult;
+use App\Model\Destinations;
+use App\Model\Zipcode;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,27 +14,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CalculateDistanceController extends AbstractController
 {
-    private GoogleAPIClient $googleAPIClient;
+    private APIDistanceResult $APIDistanceResult;
 
-    public function __construct(GoogleAPIClient $googleAPIClient)
+    public function __construct(APIDistanceResult $APIDistanceResult)
     {
-        $this->googleAPIClient = $googleAPIClient;
+        $this->APIDistanceResult = $APIDistanceResult;
     }
-
 
     /**
     * @Route("/calculatedistance")
     */
     public function __invoke(Request $request): JsonResponse
     {
-        $startingPoint = $request->query->get('startingpoint');
+        $startingPointZipcode = new Zipcode($request->query->get('startingpoint'));
 
-        $storeLocationsString = $request->query->get('storeLocations');
-        $storelocationsArray = explode(",", $storeLocationsString);
+        $destinations = new Destinations($request->query->get('destinations'));
 
-        $request = $this->googleAPIClient->sendRequest();
-
-
-        return new JsonResponse('ok');
+        return $this->APIDistanceResult->generateResult($startingPointZipcode, $destinations);
     }
 }
