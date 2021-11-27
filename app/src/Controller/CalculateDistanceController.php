@@ -25,30 +25,31 @@ class CalculateDistanceController extends AbstractController
     }
 
     /**
-    * @Route("/calculatedistance")
-    */
+     * @Route("/calculatedistance")
+     */
     public function __invoke(Request $request): JsonResponse
     {
         try {
             $startingPointZipcode = new Zipcode($request->query->get('startingpoint'));
         } catch (InvalidArgumentException $exception) {
-            return new JsonResponse(sprintf('incorrect startingpoint: %s',$exception->getMessage()), 400);
+            return new JsonResponse(sprintf('incorrect startingpoint: %s',
+                $exception->getMessage()), 400);
         }
 
         try {
             $destinations = new Destinations($request->query->get('destinations'));
         } catch (InvalidArgumentException $exception) {
-            return new JsonResponse(sprintf('incorrect destination(s), please use a comma separated list: %s',$exception->getMessage()), 400);
+            return new JsonResponse(sprintf('incorrect destination(s), please use a comma separated list: %s',
+                $exception->getMessage()), 400);
         }
 
         try {
-            return $this->APIDistanceResult->generateResult($startingPointZipcode, $destinations, APIDistanceResult::SORT_DURATION);
-        } catch (ClientExceptionInterface $exception) {
+            return $this->APIDistanceResult->generateResult($startingPointZipcode,
+                $destinations, APIDistanceResult::SORT_DURATION);
+        } catch (ClientExceptionInterface | InvalidArgumentException$exception) {
             return new JsonResponse($exception->getMessage(), 400);
         } catch (ServerExceptionInterface $exception) {
             return new JsonResponse($exception->getMessage(), 500);
-        } catch (InvalidArgumentException $exception) {
-            return new JsonResponse($exception->getMessage(), 400);
         }
     }
 }
