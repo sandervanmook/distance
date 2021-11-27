@@ -42,7 +42,7 @@ class CalculateDistanceController extends AbstractController
         }
 
         try {
-            return $this->APIDistanceResult->generateResult($startingPointZipcode, $destinations);
+            return $this->APIDistanceResult->generateResult($startingPointZipcode, $destinations, APIDistanceResult::SORT_DURATION);
         } catch (ClientExceptionInterface $exception) {
             return new JsonResponse($exception->getMessage(), 400);
         } catch (ServerExceptionInterface $exception) {

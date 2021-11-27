@@ -11,14 +11,14 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GoogleAPIClient
 {
-    const BASEURL = "https://maps.googleapis.com/maps/api/distancematrix/json";
-
     private string $APIKey;
+    private string $baseURL;
     private HttpClientInterface $client;
 
-    public function __construct(string $APIKey, HttpClientInterface $client)
+    public function __construct(string $APIKey, string $baseURL, HttpClientInterface $client)
     {
         $this->APIKey = $APIKey;
+        $this->baseURL = $baseURL;
         $this->client = $client;
     }
 
@@ -26,7 +26,7 @@ class GoogleAPIClient
     {
         $request = $this->client->request(
             'POST',
-            self::BASEURL,
+            $this->baseURL,
             [
                 'query' => [
                     'origins' => $startingPoint->isBelgianZipcode()?$startingPoint->getCompleteBelgianValue():$startingPoint->getValue(),
