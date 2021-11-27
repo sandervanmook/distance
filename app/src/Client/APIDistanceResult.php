@@ -8,6 +8,8 @@ namespace App\Client;
 
 use App\Model\Destinations;
 use App\Model\Zipcode;
+use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class APIDistanceResult
@@ -30,14 +32,19 @@ class APIDistanceResult
         $result = [];
 
         foreach ($destinations->getDestinations() as $destination) {
-            $entry = new GoogleAPIResponse($this->googleAPIClient->sendRequest($startingPointZipcode,
-                $destination));
+            try {
+                $entry = new GoogleAPIResponse($this->googleAPIClient->sendRequest($startingPointZipcode,
+                    $destination));
 
-            $result[] = [
-                'destination' => $entry->getDestination(),
-                'distance' => $entry->getDistance(),
-                'duration' => $entry->getDuration(),
-            ];
+                $result[] = [
+                    'destination' => $entry->getDestination(),
+                    'distance' => $entry->getDistance(),
+                    'duration' => $entry->getDuration(),
+                ];
+            } catch (ClientException) {
+                return new JsonResponse('Unable to fetch data from external source',
+                    400);
+            }
         }
 
         return new JsonResponse($this->sort($result, $sort), 200);
